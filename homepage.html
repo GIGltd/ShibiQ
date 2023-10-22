@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>ShibiQuiz</title>
+
+    <style>
+        body {
+            background-image: url(shibl.jpg);
+        }
+        
+        iframe {
+            display: none;
+        }
+        
+        button {
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            border: none;
+            outline: none;
+        }
+        
+        botton, label {
+            display: block;
+        }
+        
+        .tape, .tape_front, .tape_back {
+            position: absolute;
+            pointer-events: none;
+            transition-property: transform;
+            transition-duration: .10s;
+            transition-timing-function: ease;
+        }
+        
+        .tape {
+            overflow: hidden;
+            margin: auto;
+        }
+        
+        .tape_front, .tape_back {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .tape:hover .tape_front,
+        .card div:hover .tape_front {
+            transform: translateX(-10%);
+        }
+        
+        .tape:hover .tape_back,
+        .card div:hover .tape_back {
+            transform: translateX(10%);
+        }
+        
+        .tape_front::before {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 80.6%;
+            height: 11.7%;
+            top: 50%;
+            left: 50%;
+            background-color: hsl(48, 100%, 50%);
+            font-weight: bold;
+            white-space: pre;
+            text-align: center;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            box-sizing: border-box;
+            pointer-events: auto;
+        }
+        
+        .tape_back::before  {
+            content: "SOLO QUIZ";
+            display: block;
+            position: absolute;
+            width: 140.7%;
+            height: 100.6%;
+            bottom: 8.3%;
+            background-color: hsl(48, 100%, 48%);
+            box-shadow:
+            -.8vw -.8vw 2vw -.5vw hsl(48, 100%, 26%) inset,
+            .2vw 0 .2vw -.2vw hsl(48, 100%, 30%);
+            transform-origin: right bottom;
+            transform: translateX(-100%) rotate(-45deg);
+            pointer-events: auto;
+        }
+        
+        /* enter */
+        
+        #enter {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 79vw;
+            height: 79vw;
+            transform: rotate(50deg);
+            animation-name: tape, tape2;
+            animation-duration: .4s, .1s;
+            animation-delay: 9s, 9.4s;
+            animation-timing-function: linear, ease-out;
+            animation-fill-mode: backwards, none;
+        }
+        
+        #enter:hover {
+            transform: rotate(50deg) translateX(10%);
+        }
+        
+        #enter .tape_front::before {
+            content: "SOLO QUIZ";
+            font-size: 8vw;
+            line-height: 8.4vw;
+            letter-spacing: .3vw;
+            border-top: solid .5vw hsl(48, 100%, 50%);
+            border-bottom: solid .5vw hsl(48, 100%, 50%);
+            box-shadow:
+            0 .5vw 0 0 black inset,
+            0 -.5vw 0 0 black inset;
+        }
+        
+        #enter_check:checked ~ #enter,
+        #enter_check:checked ~ #enter label {
+            transition-property: transform, opacity;
+            transition-duration: 1.5s, .01s;
+            transition-delay: 0s, 1.5s;
+            transition-timing-function: cubic-bezier(.31, .73, .84, .27);
+        }
+        
+        #enter_check:checked ~ #enter {
+            opacity: 0;
+            transform: rotate(50deg) translateX(100%);
+        }
+        
+        #enter_check:checked ~ #enter.tape .tape_front {
+            transform: translateX(-100%);
+        }
+        
+        #enter_check:checked ~ #enter.tape .tape_back {
+            transform: translateX(100%);
+        }
+        
+        /* type2 */
+        
+        #type2:checked ~ .tape .tape_front::before {
+            width: 105%;
+            height: 36%;
+        }
+        
+        #type2:checked ~ .tape .tape_back::before {
+            width: 36%;
+            height: 105%;
+            bottom: 25.4%;
+        }
+        
+        #type2:checked ~ #enter {
+            width: 40vw;
+            height: 40vw;
+        }
+        
+        #type2:checked ~ #enter .tape_front::before {
+            content: "SOLO QUIZ";
+            font-size: 8vw;
+            line-height: 11.5vw;
+            letter-spacing: 0;
+            border-top: solid 1.5vw hsl(0, 0%, 97%);
+            border-bottom: solid 1.5vw hsl(0, 0%, 97%);
+            background-color: hsl(0, 0%, 97%);
+            box-shadow:
+            0 .5vw 0 0 hsl(5, 90%, 48%) inset,
+            0 -.5vw 0 0 hsl(5, 90%, 48%) inset;
+        }
+        
+        #type2:checked ~ #enter .tape_back::before  {
+            background-color: hsl(0, 0%, 97%);
+            box-shadow:
+            -1vw -1vw 4vw -1vw hsl(0, 0%, 80%) inset,
+            .2vw 0 .2vw -.2vw hsl(0, 0%, 30%);
+        }
+
+    </style> 
+ </head>
+    <body>
+    
+                <form>
+                    <iframe src="#" name="se"></iframe>
+                    <input type="button" id="enter_check">
+                    <input type="radio" name="type" id="type1">type1
+                    <input type="radio" name="type" id="type2" checked>type2
+
+                    <button type="submit"  formaction="index.html" class="tape" id="enter">
+                        <label for="enter_check" class="tape_front"></label>
+                        <label for="enter_check" class="tape_back"></label>
+                    </button>
+                
+                    <button type="submit"  formaction="index.html" class="tape" id="go">
+                        <label for="enter_check" class="tape_front"></label>
+                        <label for="enter_check" class="tape_back"></label>
+                    </button>
+                 
+
+                   <button type="submit"  formaction="index.html" class="tape" id="open">
+                        <label for="enter_check" class="tape_front"></label>
+                        <label for="enter_check" class="tape_back"></label>
+                   </button>
+                
+                </form>
+
+    </body>
+</html>
